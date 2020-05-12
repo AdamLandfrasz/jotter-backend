@@ -7,7 +7,7 @@ const UserSchema = mongoose.Schema({
     lowercase: true,
     match: /^[a-z0-9]+@[a-z]+[.]com$/,
   },
-  password: { type: String, required: true },
+  passwordHash: { type: String, required: true },
   registered: { type: Date, default: Date.now },
   notes: [mongoose.SchemaTypes.ObjectId],
 });

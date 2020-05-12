@@ -1,8 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 const logWithMoment = require("./util/logWithMoment");
 const logger = require("./middleware/logger");
+
+const authRoute = require("./routes/auth");
 
 require("dotenv").config();
 
@@ -20,6 +25,12 @@ mongoose.connect(
 );
 
 app.use(logger);
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
+
+app.use("/api/auth", authRoute);
 
 app.get("/", (req, res) => res.send("Hello World!"));
 

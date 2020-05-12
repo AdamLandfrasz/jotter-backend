@@ -8,6 +8,7 @@ const logWithMoment = require("./util/logWithMoment");
 const logger = require("./middleware/logger");
 
 const authRoute = require("./routes/auth");
+const notesRoute = require("./routes/notes");
 
 require("dotenv").config();
 
@@ -31,8 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
 
 app.use("/api/auth", authRoute);
-
-app.get("/", (req, res) => res.send("Hello World!"));
+app.use("/api/notes", notesRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => logWithMoment(`Server started on port ${PORT}`));

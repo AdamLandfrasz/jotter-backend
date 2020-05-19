@@ -64,7 +64,7 @@ router.post("/login", async (req, res) => {
       .status(200)
       .json({
         success: true,
-        message: "User has been authenticated successfully!",
+        message: "User has been successfully authenticated.",
         existingUser,
       });
   } catch (e) {

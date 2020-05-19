@@ -38,7 +38,19 @@ router.post("/", authRequired, async (req, res) => {
   }
 });
 
-router.put("/", authRequired, (req, res) => {});
+router.put("/", authRequired, async (req, res) => {
+  try {
+    await Note.updateOne({ _id: req.body.note._id }, req.body.note);
+    const editedNote = await Note.findOne({ _id: req.body.note._id });
+    res.status(200).json({
+      success: true,
+      message: "Note updated successfully.",
+      editedNote,
+    });
+  } catch (e) {
+    res.status(400).json({ success: false, message: e.toString() });
+  }
+});
 
 router.delete("/", authRequired, (req, res) => {});
 

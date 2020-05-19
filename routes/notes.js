@@ -40,7 +40,13 @@ router.post("/", authRequired, async (req, res) => {
 
 router.put("/", authRequired, async (req, res) => {
   try {
-    await Note.updateOne({ _id: req.body.note._id }, req.body.note);
+    const existingNote = await Note.findOne({ _id: req.body.note._id });
+    if (!existingNote) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Note not found!" });
+    }
+    await existingNote.updateOne(req.body.note);
     const editedNote = await Note.findOne({ _id: req.body.note._id });
     res.status(200).json({
       success: true,
@@ -52,6 +58,23 @@ router.put("/", authRequired, async (req, res) => {
   }
 });
 
-router.delete("/", authRequired, (req, res) => {});
+router.delete("/", authRequired, async (req, res) => {
+  try {
+    const existingNote = await Note.findOne({ _id: req.body.noteId });
+    if (!existingNote) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Note not found!" });
+    }
+    await existingNote.remove();
+    res.status(200).json({
+      success: true,
+      message: "Note deleted successfully.",
+      noteId: req.body.noteId,
+    });
+  } catch (e) {
+    res.status(400).json({ success: false, message: e.toString() });
+  }
+});
 
 module.exports = router;

@@ -21,11 +21,8 @@ router.get("/", authRequired, async (req, res) => {
 router.post("/", authRequired, async (req, res) => {
   try {
     const newNote = new Note({
+      ...req.body.note,
       owner: req.userId,
-      sharedWith: [],
-      title: req.body.title || "",
-      content: req.body.content || "",
-      noteType: req.body.type || undefined,
     });
     const savedNote = await newNote.save();
     res.status(201).json({
@@ -58,9 +55,9 @@ router.put("/", authRequired, async (req, res) => {
   }
 });
 
-router.delete("/", authRequired, async (req, res) => {
+router.delete("/:noteId", authRequired, async (req, res) => {
   try {
-    const existingNote = await Note.findOne({ _id: req.body.noteId });
+    const existingNote = await Note.findOne({ _id: req.params.noteId });
     if (!existingNote) {
       return res
         .status(404)
@@ -70,7 +67,7 @@ router.delete("/", authRequired, async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Note deleted successfully.",
-      noteId: req.body.noteId,
+      noteId: req.params.noteId,
     });
   } catch (e) {
     res.status(400).json({ success: false, message: e.toString() });

@@ -6,6 +6,7 @@ const NoteSchema = mongoose.Schema({
   title: { type: String, default: "" },
   content: { type: String, default: "" },
   noteType: { type: String, enum: ["note", "list"], default: "note" },
+  created: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("Note", NoteSchema);

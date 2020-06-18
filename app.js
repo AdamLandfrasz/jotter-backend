@@ -3,8 +3,6 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-
-const logWithMoment = require("./util/logWithMoment");
 const logger = require("./middleware/logger");
 
 const authRoute = require("./routes/auth");
@@ -20,12 +18,12 @@ mongoose.connect(
     useUnifiedTopology: true,
   },
   (error) => {
-    if (error) logWithMoment(`Failed to connect MongoDB`);
-    else logWithMoment(`MongoDB connected successfully`);
+    if (error) logger.logWithMoment(`Failed to connect MongoDB`);
+    else logger.logWithMoment(`MongoDB connected successfully`);
   }
 );
 
-app.use(logger);
+app.use(logger.logger);
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -35,4 +33,4 @@ app.use("/api/auth", authRoute);
 app.use("/api/notes", notesRoute);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => logWithMoment(`Server started on port ${PORT}`));
+app.listen(PORT, () => logger.logWithMoment(`Server started on port ${PORT}`));

@@ -1,4 +1,8 @@
-const logWithMoment = require("../util/logWithMoment");
+const moment = require("moment");
+
+const logWithMoment = (text) => {
+  console.log(`${text} | ${moment().format("L LTS")}`);
+};
 
 const logger = (req, res, next) => {
   logWithMoment(
@@ -7,4 +11,4 @@ const logger = (req, res, next) => {
   next();
 };
 
-module.exports = logger;
+module.exports = { logger, logWithMoment };
